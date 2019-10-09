@@ -40,7 +40,7 @@ This project includes the following script files:
     - *plugins/helpers/sql_queries.py*: Contains Insert SQL statements.
   - **SQL Tables** 
     - *plugins/operators/create_tables.sql*: Contains SQL Table creations statements.
-  - **perators**
+  - **Operators**
     - *plugins/operators/stage_redshift.py*: Operator copies data from S3 buckets into redshift staging tables.
     - *plugins/operators/load_dimension.py*: Operator loads data from redshift staging tables into dimensional tables.
     - *plugins/operators/load_fact.py*: Operator loads data from redshift staging tables into fact table.

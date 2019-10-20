@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators import LoadDimensionOperator
+from airflow.operators.capstone_plugin import LoadDimensionOperator
 from helpers import SqlQueries
 
 

@@ -21,10 +21,11 @@ class LoadDimensionOperator(BaseOperator):
         self.truncate = truncate
 
     def execute(self, context):
-         """
-          Insert data into dimensional tables from staging events and song data.
-          Using a truncate-insert method to empty target tables before loading.
-        """
+
+        #  """
+        #   Insert data into dimensional tables from staging events and song data.
+        #   Using a truncate-insert method to empty target tables before loading.
+        # """
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         if self.truncate:
             redshift.run(f"TRUNCATE TABLE {self.table}")

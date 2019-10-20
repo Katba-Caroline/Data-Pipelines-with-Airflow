@@ -1,42 +1,86 @@
 class SqlQueries:
-    songplay_table_insert = ("""
-        SELECT
-                md5(events.sessionid || events.start_time) songplay_id,
-                events.start_time, 
-                events.userid, 
-                events.level, 
-                songs.song_id, 
-                songs.artist_id, 
-                events.sessionid, 
-                events.location, 
-                events.useragent
-                FROM (SELECT TIMESTAMP 'epoch' + ts/1000 * interval '1 second' AS start_time, *
-            FROM staging_events
-            WHERE page='NextSong') events
-            LEFT JOIN staging_songs songs
-            ON events.song = songs.title
-                AND events.artist = songs.artist_name
-                AND events.length = songs.duration
+    
+    Home_Values_table_insert = ("""
+        SELECT 
+             Home_Values_ID int NOT NULL AUTO_INCREMENT,
+             Zip code AS City,
+             State,
+             Metro,
+             County name AS County,
+             "Home value ($ per m2)" AS Home_Value($perm2)
+        FROM Home_Values
+        GROUP BY YEAR(Date)
     """)
 
-    user_table_insert = ("""
-        SELECT distinct userid, firstname, lastname, gender, level
-        FROM staging_events
-        WHERE page='NextSong'
+    Rental_Values_table_insert = ("""
+        SELECT 
+            Rental_Values_ID int NOT NULL AUTO_INCREMENT,
+            ZIP Code,
+            City,
+            State,
+            Metro,
+            County,
+            "House type" AS House_Type,
+            "Price unit" AS Price_Unit,
+            "Rental value" AS Rental_Value,
+        FROM Rental__Values
+        GROUP BY YEAR(Date)
     """)
 
-    song_table_insert = ("""
-        SELECT distinct song_id, title, artist_id, year, duration
-        FROM staging_songs
+    Demographics_table_insert = ("""
+        SELECT 
+            City,
+            State, 
+            Race, 
+            Count AS Race_Count,
+            "Median Age" AS Median_Age,
+            "Male Population" AS Male_Population,
+            "Female Population" AS Female_Population,
+            "Total Population" AS Total_Population,
+            "Number of Veterans" AS Veterans_Population,
+            "Foreign-born" AS Foreign_Born,
+            "Average Household Size" AS Avg_Household_Size,
+            "State Code" AS State_Code
+        FROM Demographics
     """)
 
-    artist_table_insert = ("""
-        SELECT distinct artist_id, artist_name, artist_location, artist_latitude, artist_longitude
-        FROM staging_songs
+    City_Housing_Demographics_table_insert = ("""
+            SELECT 
+                Home_Values.City,
+                Home_Values.State, 
+                Home_Values.Home_Value,
+                Rental_Values.Rental_Value,
+                Demographics.Race,
+                Demographics.Median_Age,
+                Demographics.Male_Population,
+                Demographics.Female_Population ,
+                Demographics.Total_Population ,
+            FROM 
+                Home_Values
+            JOIN Rental_Values
+                ON Home_Values.City = Rental_Values.City
+            JOIN Demographics
+                ON Demographics.City = Home_Values.City 
+            ORDER BY City
     """)
 
-    time_table_insert = ("""
-        SELECT start_time, extract(hour from start_time), extract(day from start_time), extract(week from start_time), 
-               extract(month from start_time), extract(year from start_time), extract(dayofweek from start_time)
-        FROM songplays
+    City_Housing_Costs_table_insert = ("""
+        SELECT 
+            Home_Values.City,
+            Home_Values.State, 
+            Home_Values.Metro,
+            Home_Values.County,
+            Home_Values.Home_Value,
+            Rental_Values.House_Type AS Rental_Type,
+            Rental_Values.Rental_Value,
+            Demographics.Avg_Household_Size
+        FROM 
+            Home_Values
+        JOIN Rental_Values
+            ON Home_Values.City = Rental_Values.City
+        JOIN Demographics
+            ON Demographics.City = Home_Values.City 
+        ORDER BY City
     """)
+
+    

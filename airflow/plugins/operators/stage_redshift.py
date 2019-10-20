@@ -20,7 +20,6 @@ class StageToRedshiftOperator(BaseOperator):
 
     @apply_defaults
     def __init__(self,
-                 self,
                  redshift_conn_id="",
                  aws_credentials_id="",
                  table="",
@@ -60,12 +59,12 @@ class StageToRedshiftOperator(BaseOperator):
         self.log.info("Copying data from S3 to Redshift")
 
         s3_path = "s3://{}".format(self.s3_bucket)
-        if self.execution_date:
-            # Backfill a specific date
-            year = self.execution_date.strftime("%Y")
-            month = self.execution_date.strftime("%m")
-            day = self.execution_date.strftime("%d")
-            s3_path = '/'.join([s3_path, str(year), str(month), str(day)])
+        # if self.execution_date:
+        #     # Backfill a specific date
+        #     year = self.execution_date.strftime("%Y")
+        #     month = self.execution_date.strftime("%m")
+        #     day = self.execution_date.strftime("%d")
+        #     s3_path = '/'.join([s3_path, str(year), str(month), str(day)])
         s3_path = s3_path + '/' + self.s3_key
 
         additional=""
